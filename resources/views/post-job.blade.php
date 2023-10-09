@@ -266,9 +266,9 @@
         selector: 'textarea#jobDescription', 
         plugins: 'autolink lists link image charmap print preview anchor',
         toolbar: 'undo redo | formatselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent',
-        height: 300, // Adjust the height as needed
-        menubar: false, // Disable the menu bar
-        branding: false // Hide the "Powered by TinyMCE" text
+        height: 300, 
+        menubar: false, 
+        branding: false 
     });
 
     const inputFields = document.querySelectorAll('input[type="text"], input[type="number"], textarea, select');

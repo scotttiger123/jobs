@@ -27,6 +27,10 @@ Route::get('forgot', [LoginController::class,'forgot'])->name('forgot');
 
 /* Dashboard */
 Route::get('/', [FindJobController::class,'index'])->name('find.job');
+Route::get('/search-jobs', [FindJobController::class,'findJob'])->name('search-jobs');
+Route::get('/get-job-details/{jobId}', [FindJobController::class,'getJobDetails'])->name('get-job-detail');
+
+
 
 Route::get('dashboard', [DashboardController::class,'index'])->name('dashboard');
 Route::get('logout', [LoginController::class,'logout'])->name('logout');
@@ -34,9 +38,9 @@ Route::get('logout', [LoginController::class,'logout'])->name('logout');
 
 
 Route::get('error', [LoginController::class,'error'])->name('error');
-
 Route::get('postJob', [PostJobController::class,'index'])->name('post-job');
 Route::post('/job', [PostJobController::class, 'store'])->name('job.store');
+
 // Route::get('/', function () {
 //     return view('welcome');
 // });

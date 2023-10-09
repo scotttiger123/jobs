@@ -7,7 +7,7 @@
       Anything you want
     </div>
     <!-- Default to the left -->
-    <strong>Copyright &copy; 2014-2023 <a href="">Job Portal</a>.</strong> All rights reserved.
+    <strong>Copyright &copy; <a href="">Job Portal</a>.</strong> All rights reserved.
   </footer>
 </div>
 <!-- ./wrapper -->

@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="../../plugins/fontawesome-free/css/all.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
+    <link rel="stylesheet" href="../../plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+    
   </head>
   <body class="hold-transition layout-top-nav"  style = "background-color:white">
         <div class="wrapper" style = "background-color:white">

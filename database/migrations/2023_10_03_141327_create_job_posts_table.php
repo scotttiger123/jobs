@@ -13,24 +13,26 @@ return new class extends Migration
     {
         Schema::create('job_posts', function (Blueprint $table) {
             $table->id();
-            $table->string('jobTitle')->nullable();
-            $table->text('jobDescription')->nullable();
-            $table->string('skillsRequired')->nullable();
-            $table->string('careerLevel')->nullable();
-            $table->integer('numPositions')->nullable();
-            $table->json('jobLocation')->nullable();
-            $table->integer('min_salery')->nullable();
-            $table->integer('max_salery')->nullable();
-            $table->boolean('salaryVisibility')->default(true);
-            $table->string('genderPreference')->nullable();
-            $table->date('apply_by_date')->nullable();
-            $table->string('qualification')->nullable();
-            $table->string('specificDegreeTitle')->nullable();
-            $table->integer('minExperience')->nullable();
-            $table->integer('maxExperience')->nullable();
-            $table->string('experienceInfo')->nullable();
-            $table->integer('minAge')->nullable();
-            $table->integer('maxAge')->nullable();
+            $table->string('jobTitle')->nullable()->collation('utf8mb4_general_ci');
+            $table->text('jobDescription')->nullable()->collation('utf8mb4_general_ci');
+            $table->string('skillsRequired')->nullable()->collation('utf8mb4_general_ci');
+            $table->string('careerLevel')->nullable()->collation('utf8mb4_general_ci');
+            $table->integer('numPositions')->nullable()->collation('utf8mb4_general_ci');
+            $table->json('jobLocation')->nullable()->collation('utf8mb4_general_ci');
+            $table->integer('min_salary')->nullable()->collation('utf8mb4_general_ci');
+            $table->integer('max_salary')->nullable()->collation('utf8mb4_general_ci');
+            $table->boolean('salaryVisibility')->default(true)->collation('utf8mb4_general_ci');
+            $table->string('genderPreference')->nullable()->collation('utf8mb4_general_ci');
+            $table->date('apply_by_date')->nullable()->collation('utf8mb4_general_ci');
+            $table->string('qualification')->nullable()->collation('utf8mb4_general_ci');
+            $table->string('specificDegreeTitle')->nullable()->collation('utf8mb4_general_ci');
+            $table->integer('minExperience')->nullable()->collation('utf8mb4_general_ci');
+            $table->integer('maxExperience')->nullable()->collation('utf8mb4_general_ci');
+            $table->string('experienceInfo')->nullable()->collation('utf8mb4_general_ci');
+            $table->integer('minAge')->nullable()->collation('utf8mb4_general_ci');
+            $table->integer('maxAge')->nullable()->collation('utf8mb4_general_ci');
+            $table->string('jobType')->nullable()->collation('utf8mb4_general_ci');
+            $table->integer('created_by')->nullable()->collation('utf8mb4_general_ci');
             $table->timestamps();
         });
     }
