@@ -7,9 +7,11 @@
 <div class="content" style="background-color: white;"> <!-- Add background-color: white; here -->
       
     <div class="container" >      <!-- Separate row for "Find a Job" -->
+    
       <div class="row" id="find-job-row">
         <div class="col-md-12 text-center">
           <form class="form-inline" id="job-search-form">
+            
             <div class="form-group">
               <label id="label-text-input-what" for="text-input-where" aria-hidden="true" class="label-text-input">What</label> &nbsp;&nbsp;
               <input type="text" class="form-control mr-2" id="keywords" placeholder=" &nbsp; Job title, keywords, or company"> 
@@ -20,6 +22,8 @@
             </div>
             <button type="submit" id = 'submit-button' class="btn btn-primary">Find Job</button>
           </form>
+          
+            <div id="error-message" class="alert alert-danger auto-hide" style = "display:none;margin-left:20%;width:40%";></div>
         </div>
       </div>
 </div>
@@ -96,18 +100,27 @@
                 <div class="job-listing rounded p-3 mb-3" style="max-height: 300px; min-height: 300px; overflow: hidden; cursor: pointer; {{ $key === 0 ? 'border: 1px solid #164081;' : 'border: 1px solid #ddd;' }}" data-job-id="{{ $job->id }}">
           
                 <h4><b>{{ $job->jobTitle }}</b></h4>
-                    <p>CureMD, Lahore, Pakistan</p>
-                    <p>
-                        <i class="fas fa-map-marker-alt"></i> <!-- Location Icon -->
-                        {{ $job->jobLocation }}
-                              
+                    
+                     <p> {{ $job->company }} </p>
+                    
+                     <p>
+                        <i class="fas fa-map-marker-alt"></i> 
+                        @php
+                            $locationArray = json_decode($job->jobLocation);
+                            if (is_array($locationArray)) {
+                                echo implode(', ', $locationArray);
+                            } else {
+                                echo $job->jobLocation;
+                            }
+                        @endphp
+                        &nbsp;&nbsp; 
                         <i class="fas fa-money-bill-alt"></i> 
                         {{ $jobs[0]->min_salary }} to {{ $jobs[0]->max_salary }} / month
-
+                        &nbsp;&nbsp; 
                         <i class="fas fa-clock"></i>
                         {{ $job->jobType }} 
-                        
                     </p>
+
 
                     
                     <p>{!! $job->jobDescription !!}</p> 
@@ -458,7 +471,28 @@
           .filter h4 {
             margin-bottom: 5px;
           }
+          td {
+        text-transform: capitalize;
+    }
+    @keyframes sparkle {
+        0% {
+            color: #007bff; /* Initial color (e.g., blue) */
+        }
+        50% {
+            color: #ffbf00; /* Middle color (e.g., gold) */
+        }
+        100% {
+            color: #007bff; /* Back to initial color (blue) */
+        }
+    }
 
+    .company-badge {
+        font-size: 14px;
+        padding: 5px 10px;
+        border-radius: 5px;
+        color: #ffbf00; /* Middle color (e.g., gold) */
+        /* animation: sparkle 2s linear infinite; Apply the sparkle animation */
+    }
 </style><script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 <script>
 
@@ -502,13 +536,22 @@ var lastClickedDiv = $('#job-listings .job-listing:first');
 
 
 
-      $('#loading-container-center').show();
+
         event.preventDefault(); 
         var keywords = $('#keywords').val();
         var location = $('#location').val();
         var salary = $('#salary-min-value').text();
-        
+       
+         if (keywords.trim() === '' && location.trim() === '') {
+          $('#error-message').show(500); 
+          $('#error-message').text('Keywords or location cannot be empty.');
+         return;
+         } else {
+           $('#error-message').hide(500); 
+        }
 
+
+    $('#loading-container-center').show();
         console.log(salary);
         $.ajax({
             type: 'GET',
@@ -529,13 +572,22 @@ var lastClickedDiv = $('#job-listings .job-listing:first');
                 } else {
       
                   $.each(data.jobs, function(index, job) { 
+                    var jobLocationString = '';
+                    
+                    if (job.jobLocation !== 'null') {
+                        var jobLocationArray = JSON.parse(job.jobLocation);
+                         jobLocationString = jobLocationArray.join(', ');
+                    }
+
                   var jobHtml = `
                       <div class="job-listing rounded p-3 mb-3" style="border: 1px solid #ddd; max-height: 300px; min-height: 300px; overflow: hidden; cursor: pointer;" data-job-id="${job.id}">
                          <h4><b>${job.jobTitle}</b></h4>
-                          <p>CureMD, Lahore, Pakistan</p>
+                          <p><i class="fas fa-building"></i> 
+                              ${job.company} 
+                          </p>    
                           <p>
                               <i class="fas fa-map-marker-alt"></i> 
-                              ${job.jobLocation} 
+                              ${jobLocationString} 
                                     
                               <i class="fas fa-money-bill-alt"></i> 
                               ${job.min_salary }  - ${ job.max_salary } / month
@@ -543,7 +595,7 @@ var lastClickedDiv = $('#job-listings .job-listing:first');
                               <i class="fas fa-clock"></i>
                                ${job.jobType } 
                           </p>
-                          <p>Description: ${job.jobDescription}</p>
+                          <p>${job.jobDescription}</p>
                       </div>
                   `;
                     $('#job-listings').append(jobHtml);
@@ -591,9 +643,18 @@ $(document).on('click', '.job-listing', function () {
 
     function updateJobDetails(data) {
     var jobDetailsDiv = $('.job-header');
+    var jobLocationString = '';
+                    
+                    if (data.job.jobLocation !== 'null') {
+                        var jobLocationArray = JSON.parse(data.job.jobLocation);
+                         jobLocationString = jobLocationArray.join(', ');
+                    }
     var jobHtml = `
         <h4><b>${data.job.jobTitle}</b></h4>
-        <p>Location: ${data.job.jobLocation}</p>
+                <span class="company-badge">
+                    <i class="fas fa-certificate"></i> 
+                </span>${data.job.company}
+        <p>${jobLocationString}</p>
         <a href="{{ route('login') }}" class="btn btn-primary btn-block" id="apply_now">
                       <i class="fa fa-briefcase"></i> Apply Now
                     </a>
@@ -605,7 +666,7 @@ $(document).on('click', '.job-listing', function () {
     var jobHtml = `
         <p><b><h4>Job Description</h4></b> ${data.job.jobDescription}</p>
 
-        <p><b><h4>Job Details</h4></b> </p>
+        <p><b><h4>Job Details</h4></b></p>
         <table class="job-details-table">
     <tbody>
         <tr>
@@ -614,7 +675,11 @@ $(document).on('click', '.job-listing', function () {
         </tr>
         <tr>
             <th>Job Shift</th>
-            <td>N/A</td>
+            <td>${data.job.job_shift !== null ? data.job.job_shift : 'N/A'}</td>
+        </tr>
+        <tr>
+            <th>Job Type</th>
+            <td>${data.job.job_type !== null ? data.job.job_type : 'N/A'}</td>
         </tr>
         <tr>
             <th>Gender</th>

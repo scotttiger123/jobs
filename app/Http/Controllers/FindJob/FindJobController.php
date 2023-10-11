@@ -39,7 +39,7 @@ class FindJobController extends Controller
                 if ($location) {
                     $query->where('jobLocation', 'like', "%$location%");
                 }
-        
+                    
                 if ($salary) {
                     $query->where('min_salary', '<=', $salary)
                           ->where('max_salary', '>=', $salary);
@@ -60,7 +60,7 @@ class FindJobController extends Controller
                     
                 
         
-                $jobs = $query->get();
+                $jobs = $query->orderBy('created_at', 'desc')->get();
         
                 return response()->json(['jobs' => $jobs,'salary' => $salary]);
             } catch (\Exception $e) {

@@ -40,6 +40,13 @@ Route::get('logout', [LoginController::class,'logout'])->name('logout');
 Route::get('error', [LoginController::class,'error'])->name('error');
 Route::get('postJob', [PostJobController::class,'index'])->name('post-job');
 Route::post('/job', [PostJobController::class, 'store'])->name('job.store');
+Route::get('view-posted-jobs', [PostJobController::class,'viewPostedJobs'])->name('view-posted-job');
+Route::get('/fetch-job-details/{jobId}', [PostJobController::class,'fetchJobPost'])->name('fetch-detail');
+Route::get('add-company', [PostJobController::class,'addCompany'])->name('add-company');
+
+
+Route::get('/jobPosts', 'JobPostController@index')->name('jobPosts.index');
+
 
 // Route::get('/', function () {
 //     return view('welcome');

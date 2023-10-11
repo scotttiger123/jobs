@@ -15,8 +15,10 @@ class JobPost extends Model
         'careerLevel',
         'numPositions',
         'jobLocation',
-        'min_salery',
-        'max_salery',
+        'min_salary',
+        'max_salary',
+        'job_type',
+        'job_shift',
         'salaryVisibility',
         'genderPreference',
         'apply_by_date',
@@ -27,5 +29,8 @@ class JobPost extends Model
         'experienceInfo',
         'minAge',
         'maxAge',
+        'jobType',
+        'company',
+        'created_ by'
     ];
 }

@@ -21,6 +21,8 @@ return new class extends Migration
             $table->json('jobLocation')->nullable()->collation('utf8mb4_general_ci');
             $table->integer('min_salary')->nullable()->collation('utf8mb4_general_ci');
             $table->integer('max_salary')->nullable()->collation('utf8mb4_general_ci');
+            $table->integer('job_type')->nullable()->collation('utf8mb4_general_ci');
+            $table->integer('job_shift')->nullable()->collation('utf8mb4_general_ci');
             $table->boolean('salaryVisibility')->default(true)->collation('utf8mb4_general_ci');
             $table->string('genderPreference')->nullable()->collation('utf8mb4_general_ci');
             $table->date('apply_by_date')->nullable()->collation('utf8mb4_general_ci');
@@ -32,6 +34,7 @@ return new class extends Migration
             $table->integer('minAge')->nullable()->collation('utf8mb4_general_ci');
             $table->integer('maxAge')->nullable()->collation('utf8mb4_general_ci');
             $table->string('jobType')->nullable()->collation('utf8mb4_general_ci');
+            $table->string('company')->nullable()->collation('utf8mb4_general_ci');
             $table->integer('created_by')->nullable()->collation('utf8mb4_general_ci');
             $table->timestamps();
         });

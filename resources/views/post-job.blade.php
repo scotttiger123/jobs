@@ -24,22 +24,28 @@
                         @endif
                 <div class="card p-4">
                 <div class="bs-stepper">
-                  <div class="bs-stepper-header" role="tablist">
-                    <!-- your steps here -->
-                    <div class="step" data-target="#logins-part">
-                      <button type="button" class="step-trigger" role="tab" aria-controls="logins-part" id="logins-part-trigger">
-                        <span class="bs-stepper-circle">1</span>
-                        <span class="bs-stepper-label">Add job details</span>
-                      </button>
+                    <div class="bs-stepper-header" role="tablist">
+                        <div class="step" data-target="#logins-part">
+                            <button type="button" class="step-trigger" role="tab" aria-controls="logins-part" id="logins-part-trigger">
+                            <span class="bs-stepper-circle">1</span>
+                            <span class="bs-stepper-label">Add job details</span>
+                            </button>
+                        </div>
+                        <div class="line"></div>
+                        <div class="step" data-target="#information-part">
+                            <button type="button" class="step-trigger" role="tab" aria-controls="information-part" id="information-part-trigger">
+                                <span class="bs-stepper-circle">2</span>
+                                <span class="bs-stepper-label">Applicant Requirements</span>
+                            </button>
+                        </div>  
+                        <div class="line"></div>
+                        <div class="step" data-target="#company-part">
+                            <button type="button" class="step-trigger" role="tab" aria-controls="company-part" id="company-part-trigger">
+                                <span class="bs-stepper-circle">3</span>
+                                <span class="bs-stepper-label">Company Info </span>
+                            </button>
+                        </div>  
                     </div>
-                    <div class="line"></div>
-                    <div class="step" data-target="#information-part">
-                      <button type="button" class="step-trigger" role="tab" aria-controls="information-part" id="information-part-trigger">
-                        <span class="bs-stepper-circle">2</span>
-                        <span class="bs-stepper-label">Applicant Requirements</span>
-                      </button>
-                    </div>
-                  </div>
                   <div class="bs-stepper-content">
                     <!-- your steps content here -->
                     <div id="logins-part" class="content" role="tabpanel" aria-labelledby="logins-part-trigger">
@@ -123,7 +129,7 @@
                             <label>What is the salary range?*</label>
                             <div class="row">
                                 <div class="col">
-                                    <select id="" name="min_salery" class="form-control">
+                                    <select id="" name="min_salary" class="form-control">
                                         <option value="0">From</option>
                                         @for ($i = 1000; $i <= 1000000; $i = $i+1000)
                                             <option value="{{ $i }}">{{ $i }}</option>
@@ -132,7 +138,7 @@
                                     </select>
                                 </div>
                                 <div class="col">
-                                    <select id="" name="max_salery" class="form-control">
+                                    <select id="" name="max_salary" class="form-control">
                                         <option value="0">To</option>
                                         @for ($i = 1000; $i <= 1000000; $i = $i+1000)
                                             <option value="{{ $i }}">{{ $i }}</option>
@@ -142,7 +148,40 @@
                                 </div>
                             </div>
                         </div>
-
+                        
+                        <div class="form-group">
+                                <label for="job-type" class="col">Job Type *</label>
+                                <div class="row">
+                                    <div class="col">
+                                        <select id="job-type" name="job_type" class="form-control">
+                                            <option value="full_time">Full-Time</option>
+                                            <option value="part_time">Part-Time</option>
+                                            <option value="contract">Contract</option>
+                                            <option value="Internship">Internship</option>
+                                            <option value="freelance">Freelance</option>
+                                            
+                                        </select>
+                                    </div>
+                            </div>
+                        </div>    
+                        <div class="form-group">
+                                <label for="job-shift" class="col">Job Shift *</label>
+                            <div class="row">   
+                                <div class="col">
+                                    <select id="job-shift" name="job_shift" class="form-control">
+                                        <option value="0">Select</option>
+                                        <!-- Add your job shift options here -->
+                                        <option value="morning">Morning</option>
+                                        <option value="afternoon">Afternoon</option>
+                                        <option value="night">Night</option>
+                                        <option value="rotating">Rotating</option>
+                                        <option value="hybrid">Hybrid Work Modal</option>
+                                        <option value="work-from-home">Work from Home </option>
+                                        <!-- Add more options as needed -->
+                                    </select>
+                                </div>
+                            </div>
+                        </div>        
                     <!-- Salary Visibility -->
                     <div class="form-group clearfix">
                         <label>Should the salary be visible in your job post?</label><br>
@@ -161,7 +200,7 @@
                     <!-- Gender Preference -->
                     <div class="form-group">
                         <label>Select Gender </label>
-                        <select class="form-control select2 " style="width: 100%;">
+                        <select class="form-control select2" name = "genderPreference" style="width: 100%;">
                             
                                 <option>Male</option>
                                 <option>Female</option>
@@ -246,11 +285,17 @@
                                 </div>
                             </div>
                         </div>
-                        
-                      <button type = "button" class="btn btn-primary" onclick="stepper.previous()">Previous</button>
-                      <button type="submit" class="btn btn-success">Submit</button>
-
-                    </div>
+                        <button type = "button" class="btn btn-primary" onclick="stepper.previous()">previous</button> 
+                      <button type = "button" class="btn btn-primary" onclick="stepper.next()">next</button>
+                     </div>
+                    <div id="company-part" class="content" role="tabpanel" aria-labelledby="information-part-trigger">
+                        <div class="form-group">
+                             <label for="jobTitle">Company Name / Brand *</label>
+                             <input type="text" id="company" name="company"  class="form-control ">
+                        </div>
+                        <button type = "button" class="btn btn-primary" onclick="stepper.previous()">previous</button> 
+                        <button type="submit" class="btn btn-success">Submit</button>
+                    <div>    
                   </div>
                   
                 </div>

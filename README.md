@@ -72,3 +72,5 @@ composer require laravel/socialite
 690484006438-8mek1g5e6139dt91ocmcktq41h1l4ljr.apps.googleusercontent.com
 
 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
+
+https://hiring.rozee.pk/companies/addCompany/
