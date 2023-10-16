@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController\LoginController;
 use App\Http\Controllers\DashboardController\DashboardController;
 use App\Http\Controllers\FindJob\FindJobController;
 use App\Http\Controllers\PostJobController;
+use App\Http\Controllers\Candidate\CreateProfileController;
 
 
 
@@ -44,8 +45,11 @@ Route::get('view-posted-jobs', [PostJobController::class,'viewPostedJobs'])->nam
 Route::get('/fetch-job-details/{jobId}', [PostJobController::class,'fetchJobPost'])->name('fetch-detail');
 Route::get('add-company', [PostJobController::class,'addCompany'])->name('add-company');
 
+/* Candidate */
+Route::get('create-profile', [CreateProfileController::class,'index'])->name('create-profile');
 
-Route::get('/jobPosts', 'JobPostController@index')->name('jobPosts.index');
+
+
 
 
 // Route::get('/', function () {

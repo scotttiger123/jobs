@@ -120,7 +120,18 @@
                         <i class="fas fa-clock"></i>
                         {{ $job->jobType }} 
                     </p>
+                    <p>
+                          @php
+                              $skillsString = $job->skillsRequired;
+                              $skillsArray = explode(',', $skillsString);
+                              foreach ($skillsArray as $skill) {
+                                  echo '<span class="badge badge-primary">' . $skill . '</span> ';
+                              }
+                          @endphp
+                      </p>
 
+                      
+      
 
                     
                     <p>{!! $job->jobDescription !!}</p> 
@@ -246,7 +257,7 @@
 
        p {
             color: #333 !important; /* Dark Gray Color */
-            font-size: 12px;
+            font-size: 14px;
         }
         .label-custom-style {
             font-weight: normal; 
