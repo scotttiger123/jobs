@@ -47,6 +47,10 @@ Route::get('add-company', [PostJobController::class,'addCompany'])->name('add-co
 
 /* Candidate */
 Route::get('create-profile', [CreateProfileController::class,'index'])->name('create-profile');
+Route::get('profile', [CreateProfileController::class,'profile'])->name('profile');
+Route::get('save-info', [CreateProfileController::class,'saveInfo'])->name('save-info');
+Route::get('save-work', [CreateProfileController::class,'saveWork'])->name('save-work');
+
 
 
 

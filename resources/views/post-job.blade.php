@@ -318,14 +318,14 @@
 
     const inputFields = document.querySelectorAll('input[type="text"], input[type="number"], textarea, select');
 
-// Add a click event listener to each input field, textarea, and select element
+
 inputFields.forEach((inputField) => {
     inputField.addEventListener('click', () => {
-        // Add a bottom shadow when clicked
+        
         inputField.style.boxShadow = '0 2px 5px rgba(0, 0, 0, 0.3)';
     });
 
-    // Remove the shadow effect when the input loses focus
+    
     inputField.addEventListener('blur', () => {
         inputField.style.boxShadow = 'none';
     });

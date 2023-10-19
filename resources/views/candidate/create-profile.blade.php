@@ -108,7 +108,7 @@
                         <div class="form-group">
                             <label for="city">City</label>
                             <div class="select2-purple">
-                                <select class="select2" multiple="multiple" data-placeholder="Select a State" data-dropdown-css-class="select2-purple" style="width: 100%;" name="city[]">
+                                <select class="select2"  data-placeholder="Select a State" data-dropdown-css-class="select2-purple" style="width: 100%;" name="city">
                                 <option value="London">London</option>
                                 <option value="Birmingham">Birmingham</option>
                                 <option value="Manchester">Manchester</option>
@@ -186,7 +186,6 @@
                             <div style="position: relative;">
                                 <label for="jobTitle">Work experience *</label>
                                 <button type="button" class="btn btn-success" data-toggle="modal" data-target="#experienceModal" style="position: absolute; right: 0; top: 0; transform: translate(0, -50%); font-size: 20px;">
-                                    <!-- Plus sign icon -->
                                     <span>+</span>
                                 </button>
                             </div>
@@ -213,9 +212,43 @@
                     </div>
                     <div id="skills-part" class="content" role="tabpanel" aria-labelledby="skills-part-trigger">
                         <div class="form-group">
-                            <div style="position: relative;">
-                                <label for="jobTitle">Skills *</label>
+                            <div class="form-group">
+                                <label for="job-type" class="col">Skill Name</label>
+                                <div class="row">
+                                    <div class="col">
+                                        <input type="text" id="address" name="address"  class="form-control ">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                 <div class="col">
+                                <label for="experience">Years of Experience:</label>
+                                        <select id="experience" name="experience" class="form-control ">
+                                            <option value="0">0</option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                            <option value="6">6</option>
+                                            <option value="7">7</option>
+                                            <option value="8">8</option>
+                                            <option value="9">9</option>
+                                            <option value="10">10</option>
+                                            <option value="11">11</option>
+                                            <option value="12">12</option>
+                                            <option value="13">13</option>
+                                            <option value="14">14</option>
+                                            <option value="15">15</option>
+                                            <option value="16">16</option>
+                                            <option value="17">17</option>
+                                            <option value="18">18</option>
+                                            <option value="19">19</option>
+                                            <option value="20">20</option>
+                                            </select>
+                                </div>
                             </div>
+
+                        </div> 
                         </div>
                         
                         <button type="button" class="btn btn-primary" onclick="stepper.previous()">previous</button>
@@ -223,9 +256,12 @@
                         <button type="submit" class="btn btn-success">Submit</button>
                     </div>
                     <div id="additional-part" class="content" role="tabpanel" aria-labelledby="additional-part-trigger">
-                        <div class="form-group">
+                    <div class="form-group">
                             <div style="position: relative;">
-                                <label for="jobTitle">Aditional Information *</label>
+                                <label for="jobTitle">Add certification or license</label>
+                                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#additionalModal" style="position: absolute; right: 0; top: 0; transform: translate(0, -50%); font-size: 20px;">
+                                    <span>+</span>
+                                </button>
                             </div>
                         </div>
                         
@@ -413,6 +449,122 @@
             <div class="modal-body">
                         <div class="form-group">
                             <label for="postal_code" class="col">Level of education*</label>
+                            <div class="row">   
+                                <div class="col">
+                                    <input type="text" id="w_job_title" name="postal_code"  class="form-control ">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="postal_code" class="col">Field of study</label>
+                            <div class="row">   
+                                <div class="col">
+                                    <input type="text" id="w_company" name="postal_code"  class="form-control ">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="postal_code" class="col">School name</label>
+                            <div class="row">   
+                                <div class="col">
+                                    <input type="text" id="w_company" name="postal_code"  class="form-control ">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="postal_code">Time period</label>
+                            <div class="row">   
+                                <div class="col">
+                                <div class="icheck-primary d-inline">Currently enrolled
+                                    <input type="radio" id="checkboxPrimary1" name="r1" checked>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                        <label for="month">From</label>
+                            <div class="row">   
+                                <div class="col">
+                                    <select id="month" name="month" class = 'form-control'>
+                                        <option value="01">January</option>
+                                        <option value="02">February</option>
+                                        <option value="03">March</option>
+                                        <option value="04">April</option>
+                                        <option value="05">May</option>
+                                        <option value="06">June</option>
+                                        <option value="07">July</option>
+                                        <option value="08">August</option>
+                                        <option value="09">September</option>
+                                        <option value="10">October</option>
+                                        <option value="11">November</option>
+                                        <option value="12">December</option>
+                                    </select>
+                                </div>
+                                <div class="col">        
+                                    <select id="year" name="year" class = 'form-control'>
+                                        @for ($year = date("Y"); $year <= date("Y") + 10; $year++)
+                                            <option value="{{ $year }}">{{ $year }}</option>
+                                        @endfor
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="">To </label>
+                            <div class="row">   
+                                <div class="col">
+                                
+                                    <select id="month" name="month" class = 'form-control'>
+                                        <option value="01">January</option>
+                                        <option value="02">February</option>
+                                        <option value="03">March</option>
+                                        <option value="04">April</option>
+                                        <option value="05">May</option>
+                                        <option value="06">June</option>
+                                        <option value="07">July</option>
+                                        <option value="08">August</option>
+                                        <option value="09">September</option>
+                                        <option value="10">October</option>
+                                        <option value="11">November</option>
+                                        <option value="12">December</option>
+                                    </select>
+                                </div>
+                                <div class="col">        
+                                    
+                                    <select id="year" name="year" class = 'form-control'>
+                                        @for ($year = date("Y"); $year <= date("Y") + 10; $year++)
+                                            <option value="{{ $year }}">{{ $year }}</option>
+                                        @endfor
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                             <label for="jobDescription">Description</label>
+                                <textarea id="jobDescription" name="jobDescription"  class="form-control " rows="4"></textarea>
+                        </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-success" onclick="saveExperience()">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<!-- additional Information -->
+<div class="modal fade" id="additionalModal" tabindex="-1" role="dialog" aria-labelledby="additionalModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="additionalModalLabel">Additional Info</h5>
+
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                        <div class="form-group">
+                            <label for="postal_code" class="col">Certification / license name*</label>
                             <div class="row">   
                                 <div class="col">
                                     <input type="text" id="w_job_title" name="postal_code"  class="form-control ">
