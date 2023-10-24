@@ -171,7 +171,7 @@
               </div>
               <!-- Job Description -->
               <div class="job-description">
-                  <p>Description: Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                  <p>Description:.</p>
                 
               
               </div>
@@ -666,7 +666,7 @@ $(document).on('click', '.job-listing', function () {
                     <i class="fas fa-certificate"></i> 
                 </span>${data.job.company}
         <p>${jobLocationString}</p>
-        <a href="{{ route('login') }}" class="btn btn-primary btn-block" id="apply_now">
+        <a href="{{ route('apply-job') }}" class="btn btn-primary btn-block" id="apply_now">
                       <i class="fa fa-briefcase"></i> Apply Now
                     </a>
     `;

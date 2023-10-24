@@ -7,8 +7,8 @@ use App\Http\Controllers\FindJob\FindJobController;
 use App\Http\Controllers\PostJobController;
 use App\Http\Controllers\Candidate\CreateProfileController;
 
-
-
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 /* login */
 
@@ -50,8 +50,20 @@ Route::get('create-profile', [CreateProfileController::class,'index'])->name('cr
 Route::get('profile', [CreateProfileController::class,'profile'])->name('profile');
 Route::get('save-info', [CreateProfileController::class,'saveInfo'])->name('save-info');
 Route::get('save-work', [CreateProfileController::class,'saveWork'])->name('save-work');
+Route::get('edit-work', [CreateProfileController::class,'editWork'])->name('edit-work');
+Route::get('work-experiences/{id}', [CreateProfileController::class,'destroy'])->name('delete-work');
+Route::get('save-education', [CreateProfileController::class,'saveEducation'])->name('save-education');
+Route::get('destory-education/{id}', [CreateProfileController::class,'destroyEducation'])->name('delete-education');
+Route::get('edit-education', [CreateProfileController::class,'editEducation'])->name('edit-education');
+Route::get('save-skill', [CreateProfileController::class,'saveSkill'])->name('save-skill');
+Route::get('delete-skill/{id}', [CreateProfileController::class,'destroySkill'])->name('delete-skill');
+Route::get('edit-skill', [CreateProfileController::class,'editSkill'])->name('edit-skill');
+Route::get('save-certification', [CreateProfileController::class,'saveCertification'])->name('save-certification');
+Route::get('delete-certificate/{id}', [CreateProfileController::class,'destroyCertificate'])->name('delete-certificate');
 
-
+/*apply-job*/
+Route::get('apply-job', [CreateProfileController::class,'applyJob'])->name('apply-job');
+Route::get('get-candidate-cv', [CreateProfileController::class,'getCandidateCV'])->name('get-candidate-cv');
 
 
 
