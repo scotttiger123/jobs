@@ -12,6 +12,8 @@ use App\Models\CandidateWorkExperience;
 use App\Models\CandidateEducation;
 use App\Models\CandidateSkill; 
 use App\Models\CandidateCertification; 
+use App\Models\JobApplication; 
+use App\Models\JobPost; 
 
 use App\Models\user; 
 
@@ -19,6 +21,22 @@ use App\Models\user;
 class CreateProfileController extends Controller
 {
     
+
+    
+    public function checkJobApplicationStatus(Request $request, $jobId)
+    {
+        
+         $userId = auth()->id();
+         $jobId;
+        $applied = JobApplication::where('job_id', $jobId)
+            ->where('user_id', $userId)
+            ->exists();
+
+        return response()->json(['applied' => $applied]);
+    }
+
+
+
     public function index() {
         
         return view('candidate.create-profile');
@@ -26,26 +44,31 @@ class CreateProfileController extends Controller
 
 public function profile()
     {
-        $userId = auth()->user()->id; 
+        $userId = auth()->user()->id;
+        $email  = auth()->user()->email; 
         $candidateProfile = CandidateProfile::where('user_id', $userId)->first();
         $workExperiences = CandidateWorkExperience::where('user_id', $userId)->get();
         $candidateEducations = CandidateEducation::where('user_id', $userId)->get();
         $candidateSkills = CandidateSkill::where('user_id', $userId)->get();
         $certifications = CandidateCertification::where('user_id', $userId)->get();
-        return view('candidate.profile', compact('candidateProfile', 'workExperiences','candidateEducations','candidateSkills','certifications'));
+        return view('candidate.profile', compact('candidateProfile', 'workExperiences','candidateEducations','candidateSkills','certifications','email'));
     }
 
+    
     public function getCandidateCV()
     {
             $userId = auth()->user()->id; 
+            $email = auth()->user()->email; 
             $candidateProfile = CandidateProfile::where('user_id', $userId)->first();
             $workExperiences = CandidateWorkExperience::where('user_id', $userId)->get();
             $candidateEducations = CandidateEducation::where('user_id', $userId)->get();
             $candidateSkills = CandidateSkill::where('user_id', $userId)->get();
             $certifications = CandidateCertification::where('user_id', $userId)->get();
-
+            
             
             $candidateData = [
+                
+                'email' => $email,
                 'profile' => $candidateProfile,
                 'work_experiences' => $workExperiences,
                 'educations' => $candidateEducations,
@@ -56,15 +79,19 @@ public function profile()
             return response()->json($candidateData);
     }
 
-    public function applyJob()
-    {
-        return view('candidate.apply-job');
-    }
     
+    public function applyJob(Request $request)
+    {
+        $jobId = $request->query('jobId'); 
+
+        return view('candidate.apply-job', ['jobId' => $jobId]);
+    }
+
 
     public function saveInfo(Request $request)
     {
-        $data = $request->validate([
+        // Validate the incoming data
+        $request->validate([
             'first_name' => 'nullable',
             'last_name' => 'nullable',
             'headline' => 'nullable',
@@ -76,23 +103,41 @@ public function profile()
             'postal_code' => 'nullable',
             'summary' => 'nullable',
         ]);
-        $user = Auth::user();
-        $candidateProfile = $user->candidateProfile;
     
-        
-        if (!$candidateProfile) {
-            $candidateProfile = new CandidateProfile($data);
-            $user->candidateProfile()->save($candidateProfile);
-        } else {
-           
-            $candidateProfile->update($data);
+        // Get the authenticated user
+        $user = auth()->user();
+    
+        // Create or update the user's profile
+        $data = [
+            'first_name' => $request->input('first_name'),
+            'last_name' => $request->input('last_name'),
+            'headline' => $request->input('headline'),
+            'phone' => $request->input('phone'),
+            'email' => $request->input('email'),
+            'city' => $request->input('city'),
+            'country' => $request->input('country'),
+            'address' => $request->input('address'),
+            'postal_code' => $request->input('postal_code'),
+            'summary' => $request->input('summary'),
+        ];
+    
+        // Handle the profile picture
+        if ($request->hasFile('profile_image')) {
+            $file = $request->file('profile_image');
+            $fileName = 'profile_image_' . time() . '.' . $file->getClientOriginalExtension();
+            $file->storeAs('public/profile_images', $fileName); 
+            $data['profile_image'] = $fileName;
         }
     
-        return response()->json([
-            'message' => 'Data saved successfully',
-            'candidate_profile' => $candidateProfile
-        ]);
+       
+        $profile = $user->candidateProfile()->updateOrcreate([], $data);
+
+        return response()->json(['message' => 'Data saved successfully', 'candidate_profile' => $profile]);
+
     }
+    
+
+    
     public function saveEducation(Request $request)
     {
         $validatedData = $request->validate([
@@ -343,5 +388,21 @@ public function profile()
     return response()->json(['success' => true]);
     }
 
+
+
+public function viewAppliedJobs()
+{
+    // Get the ID of the authenticated user
+    $userId = auth()->id();
+
+    // Retrieve job applications for the authenticated user
+    $appliedJobs = JobApplication::where('user_id', $userId)->get();
+
+    // Load the associated job details for each job application
+    $appliedJobs->load('JobPost');
+
+    return view('candidate.view-applied-jobs', ['appliedJobs' => $appliedJobs]);
+}
+   
 
 }

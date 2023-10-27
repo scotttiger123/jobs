@@ -152,20 +152,26 @@
               
               <div class="job-header">
                   @if($jobs && count($jobs) > 0)
+                  
+                  
+
                       <!-- Display the first job listing -->
                       <h4><b>{{ $jobs[0]->jobTitle }}</b><h4>
                       <p>Company:</p>
                       <p>{{ $jobs[0]->min_salary }} - {{ $jobs[0]->max_salary }} a month</p>
-                  @endif
+                @endif
                   @if (Auth::check())
-                     <button type="button" class="btn btn-primary btn-block" id="apply_now">
-                        <i class="fa fa-briefcase"></i> Apply Now
-                    </button>
-                  @else
-                    <a href="{{ route('login') }}" class="btn btn-primary btn-block" id="apply_now">
-                      <i class="fa fa-briefcase"></i> Apply Now
-                    </a>
-                  @endif
+                        <a href="{{ route('apply-job', ['jobId' => $jobs[0]->id]) }}" class="btn btn-primary btn-block" id="apply_now">
+                            <i class="fa fa-briefcase"></i> Apply Now
+                        </a>
+                    @else
+                        <a href="{{ route('login') }}" class="btn btn-primary btn-block" id="apply_now">
+                            <i class="fa fa-briefcase"></i> Apply Now
+                        </a>
+                    @endif
+
+                    
+
 
 
               </div>
@@ -660,16 +666,16 @@ $(document).on('click', '.job-listing', function () {
                         var jobLocationArray = JSON.parse(data.job.jobLocation);
                          jobLocationString = jobLocationArray.join(', ');
                     }
-    var jobHtml = `
-        <h4><b>${data.job.jobTitle}</b></h4>
-                <span class="company-badge">
-                    <i class="fas fa-certificate"></i> 
-                </span>${data.job.company}
-        <p>${jobLocationString}</p>
-        <a href="{{ route('apply-job') }}" class="btn btn-primary btn-block" id="apply_now">
-                      <i class="fa fa-briefcase"></i> Apply Now
-                    </a>
-    `;
+                    var jobHtml = `
+    <h4><b>${data.job.jobTitle}</b></h4>
+    <span class="company-badge">
+        <i class="fas fa-certificate"></i> 
+    </span>${data.job.company}
+    <p>${jobLocationString}</p>
+    <a href="/apply-job?jobId=${data.job.id}" class="btn btn-primary btn-block" id="apply_now">
+        <i class="fa fa-briefcase"></i> Apply Now
+    </a>
+`;
     
     jobDetailsDiv.html(jobHtml);
     

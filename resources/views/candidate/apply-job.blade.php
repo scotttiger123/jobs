@@ -53,7 +53,7 @@
                                 </div>
                             </div>
 
-
+                            <button type="button"  class="btn btn-primary" onclick="stepper.next()">next</button>     
 
                         </div>
                         <div id="information-part" class="content" role="tabpanel" aria-labelledby="information-part-trigger">
@@ -72,11 +72,10 @@
                                         </div>   
                                         <br>
                                         <div  style = "margin:20px">
-                                            <button type="button" class="btn btn-default btn-file">Edit Resume</button>
+                                             <a href="{{ route('profile') }}?jobId={{ $jobId }}" class="btn btn-default btn-file">Edit Profile</a>
                                             
                                         </div>    
                                     
-                           
                                         <hr>
                                         <div class="form-group">
                                         <div class="icheck-primary d-inline">
@@ -100,9 +99,13 @@
                                         </div>   
                                         <!-- A div to display the selected PDF file -->
                                         <div id="selectedCV1" style="margin: 20px;"></div>
+                                        
                                     </form>
                                 </div>
+                                
                             </div>
+                            <button type="button" class="btn btn-primary" onclick="stepper.previous()">previous</button>
+                                        <button type="button" id="update_contact_info" class="btn btn-primary" onclick="stepper.next()">next</button>
                         </div>
                         <div id="submit-part" class="content" role="tabpanel" aria-labelledby="submit-part-trigger">
                         <div class="card card-primary card-outline mx-auto mt-4">
@@ -117,19 +120,18 @@
                                                     <div class="contact-item" id="phone">123-456-7890</div>
                                                 </div>
                                             </div>
-                                            <div id="resume" class = 'contact-card' ></div>
-                                            <div id="selectedCV2" class = 'contact-card' ></div>
-                                    <div class="form-group">
-                                        <button type="button" class="btn btn-block btn-dark disabled">Submit Application</button>
+                                            <div id="resume" style = "display:none" class = 'contact-card' ></div>
+                                            <div id="selectedCV2" style = "display:none" class = 'contact-card' ></div>
+                                        <div class="form-group">
+                                          <button type="button"  onclick = 'saveJobApplication()' class="btn btn-block btn-dark">Submit Application</button>
                                         
-                                    </div>
+                                         </div>
                                 </div>    
                             </div>
+                            
+                            <button type="button" class="btn btn-primary" onclick="stepper.previous()">previous</button>
                         </div>
-                        <button type="button" class="btn btn-primary" onclick="stepper.previous()">previous</button>
-                        <button type="button" id="update_contact_info" class="btn btn-primary" onclick="stepper.next()">next</button>
                     </div>
-                    
                 </div>
             </div>
 
@@ -189,7 +191,78 @@
 </style>
 <script>
 
+function saveJobApplication() {
+    let Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000
+    });
+
+    var data = new FormData();
+    let urlParams = new URLSearchParams(window.location.search);
+    let jobId = urlParams.get('jobId');
+
+    data.append('job_id', jobId);
+    data.append('apply_job_first_name', $('#apply_job_first_name').val());
+    data.append('apply_job_last_name', $('#apply_job_last_name').val());
+    data.append('apply_job_email', $('#apply_job_email').val());
+    data.append('apply_job_phone', $('#apply_job_phone').val());
+
+    
+    
+    var fileInput = document.getElementById('fileInput');
+    if (fileInput.files.length > 0) {
+        data.append('cv_upload', fileInput.files[0]);
+    }
+    var cvSaved = $('#radioPrimary1').is(':checked') ? 'yes' : 'no';
+    data.append('cv_saved', cvSaved);
+
+    $.ajax({
+        type: 'POST',
+        url: '/save-job-application',
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        data: data,
+        contentType: false,
+        processData: false,
+        success: function (response) {
+            // Handle success response
+            console.log(response);
+            Toast.fire({
+                icon: 'success',
+                title: 'Education saved successfully.'
+            });
+
+            setTimeout(function() {
+                window.location.href = '/view-applied-jobs';
+            }, 5000);
+        },
+        error: function (xhr, status, error) {
+            // Handle error
+            console.error(error);
+        }
+    });
+}
+
+
+
+
 document.getElementById('update_contact_info').addEventListener('click', function() {
+    var radio1 = document.getElementById('radioPrimary1');        
+    if (radio1.checked) {
+        $("#resume").show();
+        $("#selectedCV2").hide();
+    }
+    var radio2 = document.getElementById('radioPrimary2');
+    
+    if (radio2.checked) {
+        $("#resume").hide();
+        $("#selectedCV2").show();
+       
+    }
+
     var firstName = document.getElementById('apply_job_first_name').value;
     var lastName = document.getElementById('apply_job_last_name').value;
     var email = document.getElementById('apply_job_email').value;
@@ -213,6 +286,7 @@ var fileTypeMessage = document.getElementById('fileTypeMessage');
 fileInput.addEventListener('change', function() {
     if (fileInput.files.length > 0) {
         $("#resume").hide();
+        $("#selectedCV2").show();
         var selectedFile = fileInput.files[0];
         var selectedFileName = selectedFile.name;
         var fileExtension = selectedFileName.split('.').pop().toLowerCase();
@@ -289,10 +363,11 @@ function getCandidateCV() {
         method: 'GET',
         dataType: 'json',
         success: function (data) {
+            console.log(data);
 
             $('#apply_job_first_name').val(data.profile.first_name);
             $('#apply_job_last_name').val(data.profile.last_name);
-            $('#apply_job_email').val(data.profile.email);
+            $('#apply_job_email').val(data.email);
             $('#apply_job_phone').val(data.profile.phone);
 
             // Clear existing table rows
@@ -309,24 +384,29 @@ function getCandidateCV() {
                 return '<tr><td colspan="2">&nbsp;</td></tr>';
             }
 
-            // Display the data with headings, spaces, and underlines
-            $('#resume').append('<tr><td colspan="2"><h1 style="color: #333;">CV</h1></td></tr>'); // Title "CV"
+            var imageUrl = data.profile.profile_image ? '{{ asset('storage/profile_images/') }}' + '/' + data.profile.profile_image : 'storage/profile_images/default_profile.png';
+            $('#resume').append('<tr><td colspan="2"><h1 style="color: #333;">CV</h1></td><td style="text-align: right;padding-left:200px;"><img class="profile-user-img img-fluid img-circle" src="' + imageUrl + '" alt="User profile picture"></td></tr>');
+
+            
+                
+            
             $('#resume').append(createSpaceRow()); // Space before the "Personal Information" heading
             $('#resume').append(createHeadingRow('Personal Information'));
             $('#resume').append('<tr><td style="font-size: 18px;color: #333;">' + data.profile.first_name + ' ' + data.profile.last_name + '</td></tr>');
+            // Set the profile image source
 
             
 
-            $('#resume').append('<tr><td style="color: #333;"><strong><em>' + data.profile.headline + '<em></strong></td></tr>');
-            $('#resume').append('<tr><td style="color: #555;">' + data.profile.email + '</td></tr>');
-            $('#resume').append('<tr><td style="color: #555;">' + data.profile.phone + '</td></tr');
+            $('#resume').append('<tr><td style="color: #333;"><strong><em>' + (data.profile.headline || '') + '<em></strong></td></tr>');
+            $('#resume').append('<tr><td style="color: #555;">'  + (data.profile.email || '' ) + '</td></tr>');
+            $('#resume').append('<tr><td style="color: #555;">'  + (data.profile.phone ||  '') + '</td></tr');
 
             // Work Experience
             $('#resume').append(createSpaceRow()); // Space before the "Work Experience" heading
             $('#resume').append(createHeadingRow('Work Experience'));
             data.work_experiences.forEach(function (experience) {
-                $('#resume').append('<tr><td style="color: #555;padding-left:30px;"><strong>' + experience.job_title + '<strong></td></tr>');
-                $('#resume').append('<tr><td style="color: #555;padding-left:30px;">' + experience.company + '</td></tr>');
+                $('#resume').append('<tr><td style="color: #555;padding-left:30px;"><strong>' + ( experience.job_title || '') + '<strong></td></tr>');
+                $('#resume').append('<tr><td style="color: #555;padding-left:30px;">' + ( experience.company || '') + '</td></tr>');
                 // Add more work experience fields as needed
             });
 
@@ -334,10 +414,13 @@ function getCandidateCV() {
             $('#resume').append(createSpaceRow()); // Space before the "Education" heading
             $('#resume').append(createHeadingRow('Education'));
             data.educations.forEach(function (education) {
-                $('#resume').append('<tr><td style="color: #555;padding-left:30px;"><strong>' + education.edu_level_of_education + '</strong></td></tr>');
-                $('#resume').append('<tr><td style="color: #555;padding-left:30px;">' + education.edu_field_of_study + '</td></tr>');
-                $('#resume').append('<tr><td style="color: #555;padding-left:30px;">' + education.edu_school + '</td></tr>');
-                $('#resume').append('<tr><td style="color: #555;padding-left:30px;">' + education.edu_start_date + ' to ' + education.edu_end_date + '</td></tr>');
+                $('#resume').append('<tr><td style="color: #555;padding-left:30px;"><strong>' + ( education.edu_level_of_education || '') + '</strong></td></tr>');
+                $('#resume').append('<tr><td style="color: #555;padding-left:30px;">' + ( education.edu_field_of_study || '')  + '</td></tr>');
+                $('#resume').append('<tr><td style="color: #555;padding-left:30px;">' + ( education.edu_school || '') + '</td></tr>');
+                $('#resume').append('<tr><td style="color: #555;padding-left:30px;">' + 
+                        (education.edu_start_date && education.edu_end_date ? 
+                        education.edu_start_date + ' to ' + education.edu_end_date : '') + '</td></tr>');
+
                 
                 // Add more education fields as needed
             });
@@ -376,25 +459,54 @@ function getCandidateCV() {
     
 
     $(document).ready(function () {
-        getCandidateCV();
-        
 
-        var jobId = '23'; // $(this).data('job-id');
-        $.ajax({
-            type: 'GET',
-            url: `/get-job-details/${jobId}`,
-            dataType: 'json',
-            success: function (job) {
-                updateJobDetails(job);
-            },
-            error: function (xhr, status, error) {
-                $('#loading-container').hide();
-                console.error(error);
-            },
-        });
+        
+        
+                
+            var urlParams = new URLSearchParams(window.location.search);
+            var jobId = urlParams.get('jobId');
+
+            if (jobId === null || jobId === '') {
+                return;
+            }
+            
+            $.ajax({
+        type: 'GET',
+        url: `/check-job-application-status/${jobId}`, // A new route to check the job application
+        dataType: 'json',
+        success: function (response) {
+                if (response.applied) {
+                    
+                    console.log('You have already applied for this job.');
+                    alert('You have already applied for this job.');
+                    window.history.back();
+                } else {
+                    
+
+                            $.ajax({
+                                type: 'GET',
+                                url: `/get-job-details/${jobId}`,
+                                dataType: 'json',
+                                success: function (job) {
+                                    updateJobDetails(job);
+                                    getCandidateCV(); // this is for view
+                                },
+                                error: function (xhr, status, error) {
+                                    $('#loading-container').hide();
+                                    console.error(error);
+                                },
+                            });
+
+                        } //end if 
+                }//end success 
+            });
+        
     });
 
-    function updateJobDetails(data) {
+
+
+    
+    function updateJobDetails(data) { //get job details 
         var jobDetailsDiv = $('.job-header');
         var jobLocationString = '';
         if (data.job.jobLocation !== 'null') {
@@ -463,3 +575,5 @@ function getCandidateCV() {
     }
 </script>
 @endsection
+
+

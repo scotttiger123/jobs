@@ -33,32 +33,32 @@
       <!-- Sidebar Menu -->
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-          <li class="nav-item">
+          <!-- <li class="nav-item">
                 <a href="" class="nav-link">
                   <i class="nav-icon fas fa-tachometer-alt"></i>
                     <p>
                       Dashboard 
                     </p>
                 </a>
-          </li>
+          </li> -->
 
           <li class="nav-item">
-                <a href="{{ route('post-job') }}" class="nav-link">
+                <a href="{{ route('profile') }}" class="nav-link">
                   <i class="nav-icon fas fa-plus"></i> <!-- Plus Icon -->
                     <p>
-                      Create Job  
+                      Create Profile  
                     </p>
                 </a>
           </li>
           <li class="nav-item">
-                <a href="{{ route('view-posted-job') }}" class="nav-link">
+                <a href="{{ route('view-applied-job') }}" class="nav-link">
                 <i class="nav-icon fas fa-search"></i>
                     <p>
-                        Jobs 
+                        Jobs Applied
                     </p>
                 </a>
           </li>
-          <li class="nav-item"> 
+          <!-- <li class="nav-item"> 
           <a href="#" class="nav-link">
               <i class="nav-icon fas fa-users"></i>
               <p>
@@ -76,7 +76,7 @@
               </a>
             </li>
             </ul>
-          </li>
+          </li> -->
           <li class="nav-item">
               <a href="" class="nav-link" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                   <i class="nav-icon fas fa-sign-out-alt"></i>

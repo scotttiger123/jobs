@@ -86,7 +86,7 @@
         </div>
       @endif
       <div class="login-logo">
-        <a href="#"><i class="fas fa-briefcase"></i> Job Portal</a>
+        <a href="#"><i class="fas fa-briefcase"></i>Employers Portal</a>
       </div>
       <div class="login-box-msg">Sign in to start your session</div>
       <form action="" method="post">
@@ -117,7 +117,8 @@
       </form>
       <div class="text-center">
         <p class="mb-0">Or</p>
-        <a href="{{ route('google-login') }}" class="btn btn-google btn-block">
+        
+        <a href="{{ url('authorized/google') }}" class="btn btn-google btn-block">
           <img src="{{ asset('storage/google.png') }}" alt="Google Icon" width="28" height="28"> <!-- Custom Google icon image -->
           <span class="google-icon-text">Login with Google</span>
         </a>

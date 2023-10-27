@@ -33,4 +33,9 @@ class JobPost extends Model
         'company',
         'created_ by'
     ];
+
+    public function jobApplications()
+    {
+        return $this->hasMany(JobApplication::class, 'job_id');
+    }
 }

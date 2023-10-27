@@ -45,6 +45,7 @@
   <link rel="stylesheet" href="../../plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
        <style>
  .modal-header .modal-title { 
@@ -284,10 +285,10 @@
 
     <body class="hold-transition sidebar-mini">
         <div class="wrapper">
-            @include('layouts-vertical.header')
-            @include('layouts-vertical.sidebar')
+            @include('layouts/layouts-vertical-candidate.header')
+            @include('layouts/layouts-vertical-candidate.sidebar')
             @yield('content') 
-            @include('layouts-vertical.footer')
+            @include('layouts/layouts-vertical-candidate.footer')
         </div>
     </body>
 </html>    

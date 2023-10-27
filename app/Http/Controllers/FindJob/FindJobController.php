@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-
+use App\Models\JobApplication; 
 class FindJobController extends Controller
 {
     
@@ -18,8 +18,10 @@ class FindJobController extends Controller
             ->get();
         
             return view('find.find-job', ['jobs' => $jobs]);
+            
         }
 
+        
         public function findJob(Request $request)
         {
             try {
@@ -85,5 +87,33 @@ public function getJobDetails(Request $request, $jobId)
     
     return response()->json(['job' => $job]);
 }
+
+
+public function saveJobApplication(Request $request)
+{
+    
+    $jobApplication = new JobApplication;
+    $jobApplication->job_id = $request->job_id;
+    $jobApplication->user_id = auth()->user()->id;
+    $jobApplication->apply_job_first_name = $request->apply_job_first_name;
+    $jobApplication->apply_job_last_name = $request->apply_job_last_name;
+    $jobApplication->apply_job_email = $request->apply_job_email;
+    $jobApplication->apply_job_phone = $request->apply_job_phone;
+    $jobApplication->cv_saved = $request->cv_saved;
+   
+    if ($request->hasFile('cv_upload')) {
+        $file = $request->file('cv_upload');
+        $originalName = $file->getClientOriginalName();
+        $cvPath = $file->storeAs('cv', $originalName);
+        $jobApplication->cv_upload = $cvPath;
+    }
+    
+
+    $jobApplication->save();
+
+    
+    return response()->json(['message' => 'Application saved successfully']);
+}
+
 
 }

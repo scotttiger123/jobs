@@ -17,6 +17,7 @@ class CandidateProfile extends Model
         'city',
         'country',
         'address',
+        'profile_image',
         'postal_code',
         'summary',
     ];

@@ -8,26 +8,32 @@
             <div class="col-md-6">
                 <div class="card card-primary card-outline mx-auto mt-4">
                 <div class="card-body box-profile">
-                        
-                <div class="row">
-                    <div class="col-md-6">
-                        <h3 class="profile-username bold-heading">
-                            Personal Information
-                        </h3>
-                    </div>
-                    <div class="col-md-6 text-right">
-                        <a href="#" class="btn btn-primary btn-sm" data-toggle="modal" onclick = "populateInfoModalFields()" data-target="#additionalModal">
-                            <i class="fas fa-pencil-alt"></i> Edit
-                        </a>
-                    </div>
-                </div>
+                      <!-- Add a Back button -->
+                        <button id="backButton" class="btn btn-default btn-file" style="display: none;">
+                            <i class="fas fa-chevron-left"></i> 
+                        </button>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h3 class="profile-username bold-heading">
+                                    Personal Information
+                                </h3>
+                            </div>
+                            <div class="col-md-6 text-right">
+                                <a href="#" class="btn btn-primary btn-sm" data-toggle="modal" onclick = "populateInfoModalFields()" data-target="#additionalModal">
+                                    <i class="fas fa-pencil-alt"></i> Edit
+                                </a>
+                            </div>
+                        </div>
 
-                <div class="text-center" >
-                    <img class="profile-user-img img-fluid img-circle"
-                        src="../../dist/img/user4-128x128.jpg"
-                        alt="User profile picture">
-                        
-                </div>
+                        <div class="text-center">
+                            <label for="profile-picture">
+                                <img id="profile-image" class="profile-user-img img-fluid img-circle"
+                                    src="{{ asset('storage/profile_images/default_profile.png') }}"
+                                    alt="User profile picture">
+                            </label>
+                            <input type="file" id="profile-picture" style="display: none;" accept="image/*">
+                        </div>
+
                     @if ($candidateProfile)
                         <h3 class="profile-username text-center" id="display_name">
                                 {{ $candidateProfile->first_name }} {{ $candidateProfile->last_name }}
@@ -421,11 +427,11 @@
                         <label>Country</label>
                         <div class="row">
                             <div class="col">
-                                <select id="country" name="country" class="form-control">
+                                <select class="select2"  id ="country" data-placeholder="Select a State" data-dropdown-css-class="select2-purple" style="width: 100%;" name="city">
                                     <option value="0">Select a Country</option>
-                                    <option value="Afghanistan">Afghanistan</option>
-                                    <option value="Albania">Albania</option>
-                                    <option value="Algeria">Algeria</option>
+                                    <option value="England" selected >England</option>
+                                    <option value="Canada">Canada</option>
+                                    
                                     <!-- Add more country options here -->
                                 </select>
                             </div>
@@ -1600,28 +1606,31 @@ function populateWorkModalFields(button) {
     
     function saveInfo() {
         
-        var data = {
-            first_name: $('#first_name').val(),
-            last_name: $('#last_name').val(),
-            headline: $('#headline').val(),
-            phone: $('#phone').val(),
-            email: $('#email').val(),
-            city: $('#city').val(),
-            country: $('#country').val(),
-            address: $('#address').val(),
-            postal_code: $('#postal_code').val(),
-            summary: $('#summary_pop').val(),
-            
-        };
+        var data = new FormData();
+        var fileInput = $('#profile-picture')[0].files[0]; // Get the selected file
+        
+    data.append('profile_image', fileInput);
+    data.append('first_name', $('#first_name').val());
+    data.append('last_name', $('#last_name').val());
+    data.append('headline', $('#headline').val());
+    data.append('phone', $('#phone').val());
+    data.append('email', $('#email').val());
+    data.append('city', $('#city').val());
+    data.append('country', $('#country').val());
+    data.append('address', $('#address').val());
+    data.append('postal_code', $('#postal_code').val());
+    data.append('summary', $('#summary_pop').val());
 
         
         $.ajax({
-            type: 'GET',
+            type: 'POST',
             url: '/save-info',
             headers: {
                   'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
             data: data,
+            processData: false, // Required for FormData
+            contentType: false, // Required for FormData
             success: function(response) {
                 console.log(response);
                 $('#additionalModal').modal('hide');
@@ -1942,8 +1951,34 @@ function deleteSkill(button) {
         });
     }
 }
-    
+
+document.addEventListener("DOMContentLoaded", function () {
+    var urlParams = new URLSearchParams(window.location.search);
+    var jobId = urlParams.get("jobId");
+
+    if (jobId) {
+        // If jobId is present in the URL, display the "Back" button
+        document.getElementById("backButton").style.display = "block";
+    }
+});
+
+document.getElementById("backButton").addEventListener("click", function () {
+    history.back();
+});
+
+
+    const profileImage = document.getElementById('profile-image');
+    const fileInput = document.getElementById('profile-picture');
+
+    fileInput.addEventListener('change', (event) => {
+        const selectedFile = event.target.files[0];
+        if (selectedFile) {
+            const objectURL = URL.createObjectURL(selectedFile);
+            profileImage.src = objectURL;
+        }
+    });
 </script>
+
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tinymce@5.10.2/dist/skins/ui/oxide/skin.min.css">
 <script src="https://cdn.jsdelivr.net/npm/tinymce@5.10.2/tinymce.min.js"></script>
     <!-- <script>

@@ -1,37 +1,52 @@
-@extends('layouts-vertical.app')
-
+@extends('layouts.layouts-vertical-candidate.app')
 @section('content')
 <div class="content-wrapper">
     <div class="content">
         <div class="container-fluid">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title"><b>Posted Jobs</b></h3>
+                    <h3 class="card-title"><b>Applied Jobs</b></h3>
                 </div>
                 <div class="card-body">
                     <div class="card-body p-0">
                     <table id="jobPostTable" class="table table-bordered table-striped">
-                        <thead>
-                            <tr>
-                                <th>Job Title</th>
-                                <th>Job Skills</th>
-                                <th>Applied</th> <!-- Updated column header -->
-                                <th>Detail</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($postedJobs as $job)
-                            <tr>
-                                <td>{{ $job->jobTitle }}</td>
-                                <td>{{ $job->skillsRequired }}</td>
-                                <td>{{ $job->jobApplications->count() }}</td> <!-- Display the count -->
-                                <td>
-                                    <button class="btn btn-info view-details" data-job-id="{{ $job->id }}">View</button>
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+    <thead>
+        <tr>
+            <th>Job Title</th>
+            <th>Company</th>
+            <th>Applied</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach ($appliedJobs as $appliedJob)
+        <tr>
+            <td>
+                @if ($appliedJob->JobPost) <!-- Check if the relationship exists -->
+                    {{ $appliedJob->JobPost->jobTitle }}
+                @else
+                    Job information not available
+                @endif
+            </td>
+            <td>
+                @if ($appliedJob->JobPost) <!-- Check if the relationship exists -->
+                    {{ $appliedJob->JobPost->company }}
+                @else
+                    N/A
+                @endif
+            </td>
+            <td>
+                @if ($appliedJob->created_at)
+                    {{ $appliedJob->created_at }}
+                @else
+                    N/A
+                @endif
+            </td>
+
+           
+        </tr>
+        @endforeach
+    </tbody>
+</table>
 
                     </div>
                 </div>

@@ -349,11 +349,11 @@ inputFields.forEach((inputField) => {
             display: inline-block; /* Display the h1 element as a block to contain the shadow */
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Apply a box shadow */
         }
-    .container-fluid {
+.container-fluid {
         max-width: 80%; 
         margin: 0 auto; 
         padding: 10px; 
-    }
+ }
 
 .form-group label.required::after {
     content: '*';

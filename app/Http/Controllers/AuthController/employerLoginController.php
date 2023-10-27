@@ -8,35 +8,35 @@ use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Support\Facades\Log; 
 
-class LoginController extends Controller
+class employerLoginController extends Controller
 {
     function index () {
          
-        return view('auth.login');
+        return view('auth.login-employer');
     }
 
 
 
 
-function loginWithGoogle() { 
+function loginWithGoogleA() { 
     try {
         return Socialite::driver('google')->redirect();
-    
+        
     } catch (\Exception $e) {
+        
         return redirect()->route('error');
     }
 }
-function handleGoogleCallback() {
-    try { 
+
+function handleGoogleCallbackA() {
+    try {
         $googleUser = Socialite::driver('google')->user();
         $existingUser = User::where('email', $googleUser->email)->first();
 
         if ($existingUser) {
-            
-            auth()->login($existingUser);
-
+            // Use the "employer" guard
+            auth()->guard('employer')->login($existingUser);
         } else {
-            
             $newUser = new User();
             $newUser->name = $googleUser->name;
             $newUser->email = $googleUser->email;
@@ -44,20 +44,16 @@ function handleGoogleCallback() {
             $newUser->google_id = $googleUser->getId();
             $newUser->save();
 
-            auth()->login($newUser);
+            // Use the "employer" guard
+            auth()->guard('employer')->login($newUser);
         }
 
-        return redirect()->route('apply-job');
-
+        return redirect()->route('post-job');
     } catch (\Throwable $th) {
-        throw $th;
-        Log::error('An error occurred: ' . $th->getMessage());
-        $errorMessage = 'An error occurred. Please try again later or contact support.';
-
-        return view('error', compact('errorMessage'));
+        // Handle errors and log them
     }
-    
 }
+
 
 
 public function error()
@@ -75,10 +71,11 @@ public function error()
             ]);
             
             if(\Auth::attempt($request->only('email','password'))) {
-                 return redirect('apply-job');
+                 return redirect('post-job');
             }
 
-            return redirect('login')->withError('Login details are not valid');
+            
+            return redirect('auth.login-employer')->withError('Login details are not valid');
          
     }
 
@@ -97,10 +94,10 @@ public function error()
         return view('auth.forgot');
     }
 
-    function logout(){
+    function logoutEmployer(){
         \Session::flush();
         \Auth::logout();
-        return redirect('login');
+        return redirect('login-employer');
     }
 
     function register_user(Request $request)
@@ -121,6 +118,6 @@ public function error()
     
          Auth::login($user);
     
-        return redirect('apply-job');
+        return redirect('post-job');
     }
 }

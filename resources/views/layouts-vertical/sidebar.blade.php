@@ -41,14 +41,43 @@
                     </p>
                 </a>
           </li>
+
           <li class="nav-item">
-                <a href="{{ route('create-profile') }}" class="nav-link">
+                <a href="{{ route('post-job') }}" class="nav-link">
                   <i class="nav-icon fas fa-plus"></i> <!-- Plus Icon -->
                     <p>
-                      Create Profile  
+                      Create Job  
                     </p>
                 </a>
           </li>
+          <li class="nav-item">
+                <a href="{{ route('view-posted-job') }}" class="nav-link">
+                <i class="nav-icon fas fa-search"></i>
+                    <p>
+                        Jobs 
+                    </p>
+                </a>
+          </li>
+          <!-- <li class="nav-item"> 
+
+              <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-users"></i>
+                <p>
+                  Profile 
+                  <i class="fas fa-angle-left right"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{{ route('add-company') }}" class="nav-link">
+                <i class="fas fa-user-circle"></i>
+                    <p>
+                      Add Company Profile 
+                    </p>
+                </a>
+            </li>
+            </ul>
+          </li> -->
           <li class="nav-item">
               <a href="" class="nav-link" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                   <i class="nav-icon fas fa-sign-out-alt"></i>

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\JobPost; 
+use App\Models\jobApplication; 
 
 
 class PostJobController extends Controller
@@ -77,12 +78,12 @@ class PostJobController extends Controller
         }
     }
 
+   
     public function viewPostedJobs()
-    {
-        $postedJobs = JobPost::all(); 
-        return view('employer\view-posted-jobs', ['postedJobs' => $postedJobs]);
+    {   
+        $postedJobs = JobPost::with('jobApplications')->get();
+        return view('employer.view-posted-jobs', ['postedJobs' => $postedJobs]);
     }
-        
 
 public function fetchJobPost($jobId)
 {
@@ -99,6 +100,10 @@ public function fetchJobPost($jobId)
     }
 }
 
-
+public function viewAppliedJobs()
+    {
+        $postedJobs = JobPost::all(); 
+        return view('candidate\view-applied-jobs', ['postedJobs' => $postedJobs]);
+    }
 
 }
